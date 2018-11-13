@@ -1,7 +1,7 @@
 # ETL
 Some utility scripts, tweaks with regards to ETL
 
-***numeric_downcast.py
+### numeric_downcast.py
 ```
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 100000 entries, 0 to 99999
