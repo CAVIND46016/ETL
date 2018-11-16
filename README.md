@@ -60,6 +60,4 @@ None
 MSE: 0.0
 ```
 ###### pydot_hierarchy_diagram.py
-<br>
 ![alt text](https://github.com/CAVIND46016/ETL/blob/master/data/pydot.png)
-<br>
