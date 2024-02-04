@@ -1,0 +1,16 @@
+# Git branch in prompt.
+#   ------------------------------------------------------------
+parse_git_branch() {
+ while read -r branch; do
+     [[ $branch = \** ]] && current_branch=${branch#* }
+ done < <(git branch 2>/dev/null)
+
+ [[ $current_branch ]] && printf ' [%s]' "$current_branch"
+}
+## Modify Bash Prompt, Enable colors, improve ls
+#   ------------------------------------------------------------
+
+#export PS1="\[\e[0;32m\]\u@\w\[\e[m\]\$ "
+export PS1="\[\033[32m\]\u@\[\033[33;1m\]\w\[\033[m\]\$(parse_git_branch)\$ "
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
