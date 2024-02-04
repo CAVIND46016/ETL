@@ -1,0 +1,64 @@
+docker build -t cavindsouza/temp_image .
+docker run -t cavindsouza/temp_image
+docker run --env-file=.env -it cavindsouza/temp_image sh
+
+docker run --rm -t cavindsouza/temp_image
+docker run --rm --env-file=.env -it cavindsouza/temp_image sh
+
+# how to remove?
+docker ps -a
+docker rm
+docker rm $(docker ps -a -q -f status=exited)
+
+docker images
+docker rmi
+
+
+
+Dockerfile
+~~~~~~~~~~~~~~~
+FROM python:3.9
+
+COPY . /Users/cavindsouza/docker_testing
+# set a directory for the app
+WORKDIR /Users/cavindsouza/docker_testing
+
+# Set the SSH private key as an environment variable
+ENV SSH_PRIVATE_KEY=""
+
+# Set up the custom SSH command using the environment variable
+ENV GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i /mnt/id"
+
+# Add the configuration for github.com to the SSH config file
+RUN echo "Host github.com\n  IdentityFile /mnt/id" >> /mnt/config
+
+RUN echo "$SSH_PRIVATE_KEY" > /mnt/id && chmod 600 /mnt/id
+
+# Start the ssh-agent and add the private key
+RUN eval "$(ssh-agent)" && \
+    ssh-add /mnt/id && \
+    ssh-keyscan github.com >> /mnt/known_hosts
+
+# Clone the repository and checkout the desired branch
+RUN git clone -b master --single-branch ssh_url .
+
+# Upgrade pip and setuptools
+RUN pip install --no-cache-dir --upgrade pip setuptools
+
+# install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "tmp.py"]
+
+
+  
+SELENIUM: STANDALONE-CHROME
+~~~~~~~~~~~~~~~~~~
+version: '3.2'
+services:
+  standalone-chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - '4444:4444'
+    volumes:
+      - /path/to/temp/folder:/home/seluser/Downloads
